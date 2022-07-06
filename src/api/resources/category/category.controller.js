@@ -51,13 +51,15 @@ export default {
     // create subcategory
 
     async subCategoryCreate(req, res, next) {
-        const { name, categoryId } = req.body;
+        //create is used to post the data
+        console.log(req.body);
+        const { name, selectCategory } = req.body;
         db.SubCategory.findOne({ where: { name: name } })
             .then(data => {
                 if (data) {
-                    return db.SubCategory.update({ name: name, categoryId: categoryId }, { where: { id: data.id } })
+                    return db.SubCategory.update({ name: name, selectCategory: selectCategory }, { where: { id: data.id } })
                 }
-                return db.SubCategory.create({ name: name, categoryId: categoryId })
+                return db.SubCategory.create({ name: name, selectCategory: selectCategory })
             })
             .then(data => {
                 res.status(200).json({ 'success': true, msg: "Successfully inserted category" });
@@ -68,9 +70,8 @@ export default {
     },
     
     async subCategoryList(req, res, next) {
-        db.SubCategory.findAll({
-            include: [{ model: db.category, attributes: ["id", "name"] }]
-        })
+        //list is used to get the data from the post of subcategorycreate
+        db.SubCategory.findAll()
             .then(category => {
                 res.status(200).json({ 'success': true, data: category });
             })
@@ -99,9 +100,7 @@ export default {
 
     async childCategoryList(req, res, next) {
         
-        db.ChildCategory.findAll({
-            include: [{ model: db.category, attributes: ["id", "name"] }]
-        })
+        db.ChildCategory.findAll()
             .then(category => {
                 res.status(200).json({ 'success': true, data: category });
             })

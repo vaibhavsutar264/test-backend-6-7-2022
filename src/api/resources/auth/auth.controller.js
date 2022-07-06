@@ -16,6 +16,7 @@ export default {
     /* Add client api start here................................*/
 
     async register(req, res, next) {
+        console.log(req.body);
         const { firstName, lastName, email, password } = req.body;
         var passwordHash = bcrypt.hashSync(password);
         db.User.findOne({ where: { email: email }, paranoid: false })
